@@ -93,7 +93,10 @@
                             </p:inputText>
 
                             <h:outputText value="#{bundle.site}"></h:outputText>
-                            <p:inputText value="#{bandController.newBand.site}" style="width: 97%;" />
+                            <p:inputText value="#{bandController.newBand.site}" validatorMessage="#{bundle.invalidLength2_100}" required="true" 
+                                         requiredMessage="#{bundle.siteRequired}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
 
                             <f:facet name="footer">
                                 <p:commandButton value="#{bundle.save}" update=":form:bandsDataTable, :msgs" 
