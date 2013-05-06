@@ -19,7 +19,7 @@
                     <!-- datatable das bandas de metal -->
                     <p:panel id="panelBand" header="#{bundle.tituloBand}"> 
                         
-                        <p:dataTable id="bandsDevolucaoDataTable" var="band" value="#{bandController.bands}" 
+                        <p:dataTable id="bandsDataTable" var="band" value="#{bandController.bands}" 
                                      selection="#{bandController.selectedBand}" 
                                      scrollable="true" scrollHeight="600" rowKey="#{band.id}">
                             
@@ -49,170 +49,108 @@
 
                             <p:column sortBy="#{band.name}">
                                 <f:facet name="header">
-                                    <h:outputText value="#{bundle.nomeFantasia}" />
+                                    <h:outputText value="#{bundle.name}" />
                                 </f:facet>
-                                <h:outputText value="#{produtoDevolucao.nomeFantasia}" />
+                                <h:outputText value="#{band.name}" />
                             </p:column>
 
-                            <p:column sortBy="#{produtoDevolucao.razaoSocial}">
+                            <p:column sortBy="#{band.site}">
                                 <f:facet name="header">
-                                    <h:outputText value="#{bundle.razaoSocial}" />
+                                    <h:outputText value="#{bundle.site}" />
                                 </f:facet>
-                                <h:outputText value="#{produtoDevolucao.razaoSocial}" />
-                            </p:column>
-
-                            <p:column sortBy="#{produtoDevolucao.cpfcgc}">
-                                <f:facet name="header">
-                                    <h:outputText value="#{bundle.cpfcgc}" />
-                                </f:facet>
-                                <h:outputText value="#{produtoDevolucao.cpfcgc}" />
+                                <h:outputText value="#{band.site}" />
                             </p:column>
 
                             <f:facet name="footer">
-                                <!-- envia para dialogo de novo produto devolução -->
-                                <p:commandButton value="#{bundle.new}" oncomplete="newProdutoDevolucaoDialog.show();" 
-                                                 icon="ui-icon-star" title="#{bundle.addProdutoDevolucao}"/>
+                                <!-- envia para dialogo de banda -->
+                                <p:commandButton value="#{bundle.new}" oncomplete="newBandDialog.show();" icon="ui-icon-star" title="#{bundle.addBand}"/>
                                 
                                 <!-- envia para dialogo de atualização e detalhes -->
-                                <p:commandButton value="#{bundle.viewDetail}" disabled="true" widgetVar="produtoDevolucaoViewDetailBtnBottom" 
-                                                 oncomplete="produtoDevolucaoDetailDialog.show()" update=":produtoDevolucaoDetailForm:display" 
+                                <p:commandButton value="#{bundle.viewDetail}" disabled="true" widgetVar="bandViewDetailBtnBottom" 
+                                                 oncomplete="bandDetailDialog.show()" update=":bandDetailForm:display" 
                                                  icon="ui-icon-search" title="#{bundle.viewDetail}"/>
                                 
                                 <!-- envia para dialogo de confirmação de remoção -->
                                 <p:commandButton value="#{bundle.delete}" disabled="true" 
-                                                 widgetVar="produtoDevolucaoDeleteBtnBottom" 
-                                                 oncomplete="removeProdutoDevolucaoDialog.show()" 
-                                                 update=":removeProdutoDevolucaoForm" 
-                                                 icon="ui-icon-trash" title="#{bundle.delProdutoDevolucao}"/>
+                                                 widgetVar="bandDeleteBtnBottom" 
+                                                 oncomplete="removeBandDialog.show()" 
+                                                 update=":removeBandForm" 
+                                                 icon="ui-icon-trash" title="#{bundle.delBand}"/>
                             </f:facet>
                         </p:dataTable>
                     </p:panel>
 
                 </h:form>
 
-                <!-- dialogo de criação de produto devolução -->
-                <p:dialog header="#{bundle.addCliente}" widgetVar="newClienteDialog" resizable="false" id="newClienteDialogId" modal="true"> 
-                    <h:form id="newClienteForm">
-                        <p:panelGrid id="displayNewCliente" columns="2" style="margin:0 auto;width: 400px;">   
-                            <h:outputText value="#{bundle.nomeFantasia}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.nomeFantasia}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nomeFantasiaObrigatorio}" style="width: 97%;">
+                <!-- dialogo de criação de banda -->
+                <p:dialog header="#{bundle.addBand}" widgetVar="newBandDialog" resizable="false" id="newBandDialogId" modal="true"> 
+                    <h:form id="newBandForm">
+                        <p:panelGrid id="displayNewBand" columns="2" style="margin:0 auto;width: 400px;">   
+                            <h:outputText value="#{bundle.name}"></h:outputText>
+                            <p:inputText value="#{bandController.newBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" 
+                                         requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
                                 <f:validateLength minimum="2" maximum="100" />
                             </p:inputText>
 
-                            <h:outputText value="#{bundle.razaoSocial}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.razaoSocial}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.razaoSocialObrigatorio}" style="width: 97%;">
+                            <h:outputText value="#{bundle.name}"></h:outputText>
+                            <p:inputText value="#{bandController.newBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" 
+                                         requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
                                 <f:validateLength minimum="2" maximum="100" />
                             </p:inputText>
 
-                            <h:outputText value="#{bundle.cpfcgc}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.cpfcgc}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.endereco}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.endereco}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.numero}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.numero}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.complemento}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.complemento}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.bairro}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.bairro}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.estado}"></h:outputText>
-                            <p:autoComplete id="completeEstado" minQueryLength="2" value="#{dudicoClienteBean.completeEstado}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteEstado}" />  
-
-                            <h:outputText value="#{bundle.cidade}"></h:outputText>
-                            <p:autoComplete id="completeCidade" minQueryLength="2" value="#{dudicoClienteBean.completeCidade}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteCidade}" />  
-
-                            <h:outputText value="#{bundle.cep}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.cep}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.ddd}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.ddd}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.telefone}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.newCliente.telefone}" style="width: 97%;" />
+                            <h:outputText value="#{bundle.site}"></h:outputText>
+                            <p:inputText value="#{bandCotroller.newBand.site}" style="width: 97%;" />
 
                             <f:facet name="footer">
-                                <p:commandButton value="#{bundle.save}" update=":form:clientesDataTable, :msgs" oncomplete=" handleSubmitRequest(args, newClienteDialog,'newClienteForm');" actionListener="#{dudicoClienteBean.doCreateCliente}"/>
+                                <p:commandButton value="#{bundle.save}" update=":form:bandDataTable, :msgs" 
+                                                 oncomplete=" handleSubmitRequest(args, newBandDialog,'newBandForm');" actionListener="#{bandCotroller.doCreateBand}"/>
                                 <p:commandButton type="reset" value="#{bundle.reset}" />
                             </f:facet>
                         </p:panelGrid>  
                     </h:form>
                 </p:dialog>
 
-                <!-- dialogo de detalhamento e atualização de cliente -->
-                <p:dialog header="#{bundle.cliente}" widgetVar="clienteDetailDialog" resizable="false" id="clienteDetailDialogId" modal="true"> 
-                    <h:form id="clienteDetailForm">
+                <!-- dialogo de detalhamento e atualização da banda -->
+                <p:dialog header="#{bundle.band}" widgetVar="bandDetailDialog" resizable="false" id="bandDetailDialogId" modal="true"> 
+                    <h:form id="bandDetailForm">
                         <p:panelGrid id="display" columns="2" style="margin:0 auto;width: 400px;">   
                             <h:outputText value="#{bundle.id}"></h:outputText>
-                            <h:inputHidden value="#{dudicoClienteBean.selectedCliente.id}" />
+                            <h:inputHidden value="#{bandCotroller.selectedBand.id}" />
 
-                            <h:outputText value="#{bundle.nomeFantasia}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.nomeFantasia}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nomeFantasiaObrigatorio}" style="width: 97%;">
+                            <h:outputText value="#{bundle.name}"></h:outputText>
+                            <p:inputText value="#{bandCotroller.selectedBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
                                 <f:validateLength minimum="2" maximum="100" />
                             </p:inputText>
 
-                            <h:outputText value="#{bundle.razaoSocial}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.razaoSocial}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.razaoSocialObrigatorio}" style="width: 97%;">
+                            <h:outputText value="#{bundle.site}"></h:outputText>
+                            <p:inputText value="#{bandCotroller.selectedBand.site}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.siteRequired}" style="width: 97%;">
                                 <f:validateLength minimum="2" maximum="100" />
                             </p:inputText>
-
-                            <h:outputText value="#{bundle.cpfcgc}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.cpfcgc}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.endereco}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.endereco}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.numero}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.numero}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.complemento}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.complemento}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.bairro}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.bairro}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.estado}"></h:outputText>
-                            <p:autoComplete id="completeEstado" minQueryLength="2" value="#{dudicoClienteBean.selectedCliente.estado}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteEstado}" />  
-
-                            <h:outputText value="#{bundle.cidade}"></h:outputText>
-                            <p:autoComplete id="completeCidade" minQueryLength="2" value="#{dudicoClienteBean.selectedCliente.cidade}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteCidade}" />  
-
-                            <h:outputText value="#{bundle.cep}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.cep}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.ddd}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.ddd}" style="width: 97%;" />
-
-                            <h:outputText value="#{bundle.telefone}"></h:outputText>
-                            <p:inputText value="#{dudicoClienteBean.selectedCliente.telefone}" style="width: 97%;" />
 
                             <f:facet name="footer">
-                                <p:commandButton value="#{bundle.atualizar}" update=":form:clientesDataTable, :msgs" oncomplete="handleSubmitRequest(args, clienteDetailDialog,'clienteDetailForm'); " actionListener="#{dudicoClienteBean.doUpdateCliente}"/>
+                                <p:commandButton value="#{bundle.atualizar}" update=":form:bandDataTable, :msgs" oncomplete="handleSubmitRequest(args, bandDetailDialog,'bandDetailForm'); " actionListener="#{bandController.doUpdateBand}"/>
                             </f:facet>
                         </p:panelGrid> 
                     </h:form>
                 </p:dialog>
 
                 <!-- dialogo de confirmação de remoção -->
-                <p:confirmDialog id="confirmDialog" widgetVar="removeClienteDialog" message="#{bundle.removeConfirm}" header="#{bundle.delCliente}" severity="alert">  
-                    <h:form id="removeClienteForm">
-                        <h:inputHidden value="#{dudicoClienteBean.selectedCliente.id}" />
-                        <p:commandButton id="confirm" value="#{bundle.yes}" update=":form:clientesDataTable" oncomplete="removeClienteDialog.hide()" actionListener="#{dudicoClienteBean.doDeleteCliente}" />  
-                        <p:commandButton id="decline" value="#{bundle.no}" onclick="removeClienteDialog.hide();" type="button" />   
+                <p:confirmDialog id="confirmDialog" widgetVar="removeBandDialog" message="#{bundle.removeConfirm}" header="#{bundle.delBand}" severity="alert">  
+                    <h:form id="removeBandForm">
+                        <h:inputHidden value="#{bandController.selectedBand.id}" />
+                        <p:commandButton id="confirm" value="#{bundle.yes}" update=":form:bandDataTable" oncomplete="removeBandDialog.hide()" actionListener="#{bandController.doDeleteBand}" />  
+                        <p:commandButton id="decline" value="#{bundle.no}" onclick="removeBandDialog.hide();" type="button" />   
                     </h:form>
                 </p:confirmDialog>
 
                 <script type="text/javascript">
                             // verifica se uma linha da tabela foi selecionada e habilita os botões de ação.  
-                            function isSelectedCliente(xhr, status, args) {
+                            function isSelectedBand(xhr, status, args) {
                                 if (args.isSelected) {
-                                    clienteViewDetailBtnTop.enable();
-                                    clienteDeleteBtnTop.enable();
-                                    clienteViewDetailBtnBottom.enable();
-                                    clienteDeleteBtnBottom.enable();
+                                    bandViewDetailBtnTop.enable();
+                                    bandDeleteBtnTop.enable();
+                                    bandViewDetailBtnBottom.enable();
+                                    bandDeleteBtnBottom.enable();
                                 }
                             }
                 </script>
