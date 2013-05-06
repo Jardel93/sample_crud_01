@@ -1,5 +1,7 @@
 package com.heliofrota.controller;
 
+import com.heliofrota.ejb.BandEJB;
+import com.heliofrota.entity.Band;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
