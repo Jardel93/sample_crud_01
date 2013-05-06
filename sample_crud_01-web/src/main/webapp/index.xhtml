@@ -17,7 +17,7 @@
                 <h:form id="form">
 
                     <!-- datatable das bandas de metal -->
-                    <p:panel id="panelBand" header="#{bundle.tituloBand}"> 
+                    <p:panel id="panelBand" header="#{bundle.titleBand}"> 
                         
                         <p:dataTable id="bandsDataTable" var="band" value="#{bandController.bands}" 
                                      selection="#{bandController.selectedBand}" 
@@ -102,7 +102,7 @@
                             <p:inputText value="#{bandCotroller.newBand.site}" style="width: 97%;" />
 
                             <f:facet name="footer">
-                                <p:commandButton value="#{bundle.save}" update=":form:bandDataTable, :msgs" 
+                                <p:commandButton value="#{bundle.save}" update=":form:bandsDataTable, :msgs" 
                                                  oncomplete=" handleSubmitRequest(args, newBandDialog,'newBandForm');" actionListener="#{bandCotroller.doCreateBand}"/>
                                 <p:commandButton type="reset" value="#{bundle.reset}" />
                             </f:facet>
@@ -128,7 +128,7 @@
                             </p:inputText>
 
                             <f:facet name="footer">
-                                <p:commandButton value="#{bundle.atualizar}" update=":form:bandDataTable, :msgs" oncomplete="handleSubmitRequest(args, bandDetailDialog,'bandDetailForm'); " actionListener="#{bandController.doUpdateBand}"/>
+                                <p:commandButton value="#{bundle.atualizar}" update=":form:bandsDataTable, :msgs" oncomplete="handleSubmitRequest(args, bandDetailDialog,'bandDetailForm'); " actionListener="#{bandController.doUpdateBand}"/>
                             </f:facet>
                         </p:panelGrid> 
                     </h:form>
@@ -138,7 +138,7 @@
                 <p:confirmDialog id="confirmDialog" widgetVar="removeBandDialog" message="#{bundle.removeConfirm}" header="#{bundle.delBand}" severity="alert">  
                     <h:form id="removeBandForm">
                         <h:inputHidden value="#{bandController.selectedBand.id}" />
-                        <p:commandButton id="confirm" value="#{bundle.yes}" update=":form:bandDataTable" oncomplete="removeBandDialog.hide()" actionListener="#{bandController.doDeleteBand}" />  
+                        <p:commandButton id="confirm" value="#{bundle.yes}" update=":form:bandsDataTable" oncomplete="removeBandDialog.hide()" actionListener="#{bandController.doDeleteBand}" />  
                         <p:commandButton id="decline" value="#{bundle.no}" onclick="removeBandDialog.hide();" type="button" />   
                     </h:form>
                 </p:confirmDialog>
