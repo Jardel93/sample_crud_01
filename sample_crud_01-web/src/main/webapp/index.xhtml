@@ -93,11 +93,11 @@
                             </p:inputText>
 
                             <h:outputText value="#{bundle.site}"></h:outputText>
-                            <p:inputText value="#{bandCotroller.newBand.site}" style="width: 97%;" />
+                            <p:inputText value="#{bandController.newBand.site}" style="width: 97%;" />
 
                             <f:facet name="footer">
                                 <p:commandButton value="#{bundle.save}" update=":form:bandsDataTable, :msgs" 
-                                                 oncomplete=" handleSubmitRequest(args, newBandDialog,'newBandForm');" actionListener="#{bandCotroller.doCreateBand}"/>
+                                                 oncomplete=" handleSubmitRequest(args, newBandDialog,'newBandForm');" actionListener="#{bandController.doCreateBand}"/>
                                 <p:commandButton type="reset" value="#{bundle.reset}" />
                             </f:facet>
                         </p:panelGrid>  
@@ -109,15 +109,15 @@
                     <h:form id="bandDetailForm">
                         <p:panelGrid id="display" columns="2" style="margin:0 auto;width: 400px;">   
                             <h:outputText value="#{bundle.id}"></h:outputText>
-                            <h:inputHidden value="#{bandCotroller.selectedBand.id}" />
+                            <h:inputHidden value="#{bandController.selectedBand.id}" />
 
                             <h:outputText value="#{bundle.name}"></h:outputText>
-                            <p:inputText value="#{bandCotroller.selectedBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
+                            <p:inputText value="#{bandController.selectedBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
                                 <f:validateLength minimum="2" maximum="100" />
                             </p:inputText>
 
                             <h:outputText value="#{bundle.site}"></h:outputText>
-                            <p:inputText value="#{bandCotroller.selectedBand.site}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.siteRequired}" style="width: 97%;">
+                            <p:inputText value="#{bandController.selectedBand.site}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.siteRequired}" style="width: 97%;">
                                 <f:validateLength minimum="2" maximum="100" />
                             </p:inputText>
 
