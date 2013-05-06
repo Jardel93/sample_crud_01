@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <ui:composition template="/layout.xhtml">
+            <ui:define name="title">#{bundle.titleBand}</ui:define>
+            <ui:define name="content">
+
+                <!-- container para as mensagens de erro -->
+                <p:growl id="msgs" showDetail="false"/>
+
+                <!-- formulario para datatable de produtos de devolução -->
+                <h:form id="form">
+
+                    <!-- datatable de produtos de devolução -->
+                    <p:panel id="panelProdutoDevolucao" header="#{bundle.tituloControleDevolucao}"> 
+                        <p:dataTable id="produtosDevolucaoDataTable" var="produtoDevolucao" value="#{produtoDevolucaoBean.produtos}" 
+                                     selection="#{produtoDevolucaoBean.selectedProdutoDevolucao}" 
+                                     scrollable="true" scrollHeight="600" rowKey="#{produtoDevolucao.id}">
+                            <f:facet name="header">
+                                
+                                <!-- envia para dialogo de novo produto devolução -->
+                                <p:commandButton value="#{bundle.new}" oncomplete="newProdutoDevolucaoDialog.show();" 
+                                                 icon="ui-icon-star" title="#{bundle.addProdutoDevolucao}"/>
+                                
+                                <!-- envia para dialogo de atualização e detalhes -->
+                                <p:commandButton value="#{bundle.viewDetail}" widgetVar="produtoDevolucaoViewDetailBtnTop" disabled="true" 
+                                                 oncomplete="produtoDevolucaoDetailDialog.show()" 
+                                                 update=":produtoDevolucaoDetailForm:display" 
+                                                 icon="ui-icon-search" title="#{bundle.viewDetail}"/>
+                                
+                                <!-- envia para dialogo de confirmação de remoção -->
+                                <p:commandButton value="#{bundle.delete}" disabled="true" widgetVar="produtoDevolucaoDeleteBtnTop" 
+                                                 oncomplete="removeProdutoDevolucaoDialog.show()" 
+                                                 update=":removeProdutoDevolucaoForm" 
+                                                 icon="ui-icon-trash" title="#{bundle.delProdutoDevolucao}"/>
+                                
+                            </f:facet>
+
+                            <p:ajax event="rowSelectRadio" listener="#{produtoDevolucaoBean.onRowSelectProdutoDevolucao}" 
+                                    oncomplete="isSelectedProdutoDevolucao(xhr, status, args);" />  
+                            
+                            <p:column selectionMode="single" style="width:18px" />
+
+                            <p:column sortBy="#{produtoDevolucao.nomeFantasia}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.nomeFantasia}" />
+                                </f:facet>
+                                <h:outputText value="#{produtoDevolucao.nomeFantasia}" />
+                            </p:column>
+
+                            <p:column sortBy="#{produtoDevolucao.razaoSocial}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.razaoSocial}" />
+                                </f:facet>
+                                <h:outputText value="#{produtoDevolucao.razaoSocial}" />
+                            </p:column>
+
+                            <p:column sortBy="#{produtoDevolucao.cpfcgc}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.cpfcgc}" />
+                                </f:facet>
+                                <h:outputText value="#{produtoDevolucao.cpfcgc}" />
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <!-- envia para dialogo de novo produto devolução -->
+                                <p:commandButton value="#{bundle.new}" oncomplete="newProdutoDevolucaoDialog.show();" 
+                                                 icon="ui-icon-star" title="#{bundle.addProdutoDevolucao}"/>
+                                
+                                <!-- envia para dialogo de atualização e detalhes -->
+                                <p:commandButton value="#{bundle.viewDetail}" disabled="true" widgetVar="produtoDevolucaoViewDetailBtnBottom" 
+                                                 oncomplete="produtoDevolucaoDetailDialog.show()" update=":produtoDevolucaoDetailForm:display" 
+                                                 icon="ui-icon-search" title="#{bundle.viewDetail}"/>
+                                
+                                <!-- envia para dialogo de confirmação de remoção -->
+                                <p:commandButton value="#{bundle.delete}" disabled="true" 
+                                                 widgetVar="produtoDevolucaoDeleteBtnBottom" 
+                                                 oncomplete="removeProdutoDevolucaoDialog.show()" 
+                                                 update=":removeProdutoDevolucaoForm" 
+                                                 icon="ui-icon-trash" title="#{bundle.delProdutoDevolucao}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+
+                </h:form>
+
+                <!-- dialogo de criação de produto devolução -->
+                <p:dialog header="#{bundle.addCliente}" widgetVar="newClienteDialog" resizable="false" id="newClienteDialogId" modal="true"> 
+                    <h:form id="newClienteForm">
+                        <p:panelGrid id="displayNewCliente" columns="2" style="margin:0 auto;width: 400px;">   
+                            <h:outputText value="#{bundle.nomeFantasia}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.nomeFantasia}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nomeFantasiaObrigatorio}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <h:outputText value="#{bundle.razaoSocial}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.razaoSocial}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.razaoSocialObrigatorio}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <h:outputText value="#{bundle.cpfcgc}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.cpfcgc}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.endereco}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.endereco}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.numero}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.numero}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.complemento}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.complemento}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.bairro}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.bairro}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.estado}"></h:outputText>
+                            <p:autoComplete id="completeEstado" minQueryLength="2" value="#{dudicoClienteBean.completeEstado}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteEstado}" />  
+
+                            <h:outputText value="#{bundle.cidade}"></h:outputText>
+                            <p:autoComplete id="completeCidade" minQueryLength="2" value="#{dudicoClienteBean.completeCidade}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteCidade}" />  
+
+                            <h:outputText value="#{bundle.cep}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.cep}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.ddd}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.ddd}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.telefone}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.newCliente.telefone}" style="width: 97%;" />
+
+                            <f:facet name="footer">
+                                <p:commandButton value="#{bundle.save}" update=":form:clientesDataTable, :msgs" oncomplete=" handleSubmitRequest(args, newClienteDialog,'newClienteForm');" actionListener="#{dudicoClienteBean.doCreateCliente}"/>
+                                <p:commandButton type="reset" value="#{bundle.reset}" />
+                            </f:facet>
+                        </p:panelGrid>  
+                    </h:form>
+                </p:dialog>
+
+                <!-- dialogo de detalhamento e atualização de cliente -->
+                <p:dialog header="#{bundle.cliente}" widgetVar="clienteDetailDialog" resizable="false" id="clienteDetailDialogId" modal="true"> 
+                    <h:form id="clienteDetailForm">
+                        <p:panelGrid id="display" columns="2" style="margin:0 auto;width: 400px;">   
+                            <h:outputText value="#{bundle.id}"></h:outputText>
+                            <h:inputHidden value="#{dudicoClienteBean.selectedCliente.id}" />
+
+                            <h:outputText value="#{bundle.nomeFantasia}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.nomeFantasia}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nomeFantasiaObrigatorio}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <h:outputText value="#{bundle.razaoSocial}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.razaoSocial}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.razaoSocialObrigatorio}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <h:outputText value="#{bundle.cpfcgc}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.cpfcgc}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.endereco}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.endereco}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.numero}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.numero}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.complemento}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.complemento}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.bairro}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.bairro}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.estado}"></h:outputText>
+                            <p:autoComplete id="completeEstado" minQueryLength="2" value="#{dudicoClienteBean.selectedCliente.estado}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteEstado}" />  
+
+                            <h:outputText value="#{bundle.cidade}"></h:outputText>
+                            <p:autoComplete id="completeCidade" minQueryLength="2" value="#{dudicoClienteBean.selectedCliente.cidade}" effect="fade" completeMethod="#{dudicoClienteBean.queryCompleteCidade}" />  
+
+                            <h:outputText value="#{bundle.cep}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.cep}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.ddd}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.ddd}" style="width: 97%;" />
+
+                            <h:outputText value="#{bundle.telefone}"></h:outputText>
+                            <p:inputText value="#{dudicoClienteBean.selectedCliente.telefone}" style="width: 97%;" />
+
+                            <f:facet name="footer">
+                                <p:commandButton value="#{bundle.atualizar}" update=":form:clientesDataTable, :msgs" oncomplete="handleSubmitRequest(args, clienteDetailDialog,'clienteDetailForm'); " actionListener="#{dudicoClienteBean.doUpdateCliente}"/>
+                            </f:facet>
+                        </p:panelGrid> 
+                    </h:form>
+                </p:dialog>
+
+                <!-- dialogo de confirmação de remoção -->
+                <p:confirmDialog id="confirmDialog" widgetVar="removeClienteDialog" message="#{bundle.removeConfirm}" header="#{bundle.delCliente}" severity="alert">  
+                    <h:form id="removeClienteForm">
+                        <h:inputHidden value="#{dudicoClienteBean.selectedCliente.id}" />
+                        <p:commandButton id="confirm" value="#{bundle.yes}" update=":form:clientesDataTable" oncomplete="removeClienteDialog.hide()" actionListener="#{dudicoClienteBean.doDeleteCliente}" />  
+                        <p:commandButton id="decline" value="#{bundle.no}" onclick="removeClienteDialog.hide();" type="button" />   
+                    </h:form>
+                </p:confirmDialog>
+
+                <script type="text/javascript">
+                            // verifica se uma linha da tabela foi selecionada e habilita os botões de ação.  
+                            function isSelectedCliente(xhr, status, args) {
+                                if (args.isSelected) {
+                                    clienteViewDetailBtnTop.enable();
+                                    clienteDeleteBtnTop.enable();
+                                    clienteViewDetailBtnBottom.enable();
+                                    clienteDeleteBtnBottom.enable();
+                                }
+                            }
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
