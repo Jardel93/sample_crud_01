@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <ui:composition template="/layout.xhtml">
+            <ui:define name="title">#{bundle.titleBand}</ui:define>
+            <ui:define name="content">
+
+                <!-- container para as mensagens de erro -->
+                <p:growl id="msgs" showDetail="false"/>
+
+                <!-- formulario para datatable das bandas de metal -->
+                <h:form id="form">
+
+                    <!-- datatable das bandas de metal -->
+                    <p:panel id="panelBand" header="#{bundle.titleBand}"> 
+                        
+                        <p:dataTable id="bandsDataTable" var="band" value="#{bandController.bands}" 
+                                     selection="#{bandController.selectedBand}" 
+                                     scrollable="true" scrollHeight="600" rowKey="#{band.id}">
+                            
+                            <f:facet name="header">
+                                
+                                <!-- envia para dialogo de nova banda -->
+                                <p:commandButton value="#{bundle.new}" oncomplete="newBandDialog.show();" 
+                                                 icon="ui-icon-star" title="#{bundle.addBand}"/>
+                                
+                                <!-- envia para dialogo de atualização e detalhes -->
+                                <p:commandButton value="#{bundle.viewDetail}" widgetVar="bandViewDetailBtnTop" disabled="true" 
+                                                 oncomplete="bandDetailDialog.show()" 
+                                                 update=":bandDetailForm:display" 
+                                                 icon="ui-icon-search" title="#{bundle.viewDetail}"/>
+                                
+                                <!-- envia para dialogo de confirmação de remoção -->
+                                <p:commandButton value="#{bundle.delete}" disabled="true" widgetVar="bandDeleteBtnTop" 
+                                                 oncomplete="removeBandDialog.show()" 
+                                                 update=":removeBandForm" 
+                                                 icon="ui-icon-trash" title="#{bundle.delBand}"/>
+                                
+                            </f:facet>
+
+                            <p:ajax event="rowSelectRadio" listener="#{bandController.onRowSelectBand}" oncomplete="isSelectedBand(xhr, status, args);" />  
+                            
+                            <p:column selectionMode="single" style="width:18px" />
+
+                            <p:column sortBy="#{band.name}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.name}" />
+                                </f:facet>
+                                <h:outputText value="#{band.name}" />
+                            </p:column>
+
+                            <p:column sortBy="#{band.site}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.site}" />
+                                </f:facet>
+                                <h:outputText value="#{band.site}" />
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <!-- envia para dialogo de banda -->
+                                <p:commandButton value="#{bundle.new}" oncomplete="newBandDialog.show();" icon="ui-icon-star" title="#{bundle.addBand}"/>
+                                
+                                <!-- envia para dialogo de atualização e detalhes -->
+                                <p:commandButton value="#{bundle.viewDetail}" disabled="true" widgetVar="bandViewDetailBtnBottom" 
+                                                 oncomplete="bandDetailDialog.show()" update=":bandDetailForm:display" 
+                                                 icon="ui-icon-search" title="#{bundle.viewDetail}"/>
+                                
+                                <!-- envia para dialogo de confirmação de remoção -->
+                                <p:commandButton value="#{bundle.delete}" disabled="true" 
+                                                 widgetVar="bandDeleteBtnBottom" 
+                                                 oncomplete="removeBandDialog.show()" 
+                                                 update=":removeBandForm" 
+                                                 icon="ui-icon-trash" title="#{bundle.delBand}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+
+                </h:form>
+
+                <!-- dialogo de criação de banda -->
+                <p:dialog header="#{bundle.addBand}" widgetVar="newBandDialog" resizable="false" id="newBandDialogId" modal="true"> 
+                    <h:form id="newBandForm">
+                        <p:panelGrid id="displayNewBand" columns="2" style="margin:0 auto;width: 400px;">   
+                            <h:outputText value="#{bundle.name}"></h:outputText>
+                            <p:inputText value="#{bandController.newBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" 
+                                         requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <h:outputText value="#{bundle.site}"></h:outputText>
+                            <p:inputText value="#{bandController.newBand.site}" validatorMessage="#{bundle.invalidLength2_100}" required="true" 
+                                         requiredMessage="#{bundle.siteRequired}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="#{bundle.save}" update=":form:bandsDataTable, :msgs" 
+                                                 oncomplete=" handleSubmitRequest(args, newBandDialog,'newBandForm');" actionListener="#{bandController.doCreateBand}"/>
+                                <p:commandButton type="reset" value="#{bundle.reset}" />
+                            </f:facet>
+                        </p:panelGrid>  
+                    </h:form>
+                </p:dialog>
+
+                <!-- dialogo de detalhamento e atualização da banda -->
+                <p:dialog header="#{bundle.band}" widgetVar="bandDetailDialog" resizable="false" id="bandDetailDialogId" modal="true"> 
+                    <h:form id="bandDetailForm">
+                        <p:panelGrid id="display" columns="2" style="margin:0 auto;width: 400px;">   
+                            <h:outputText value="#{bundle.id}"></h:outputText>
+                            <h:inputHidden value="#{bandController.selectedBand.id}" />
+
+                            <h:outputText value="#{bundle.name}"></h:outputText>
+                            <p:inputText value="#{bandController.selectedBand.name}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.nameRequired}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <h:outputText value="#{bundle.site}"></h:outputText>
+                            <p:inputText value="#{bandController.selectedBand.site}" validatorMessage="#{bundle.invalidLength2_100}" required="true" requiredMessage="#{bundle.siteRequired}" style="width: 97%;">
+                                <f:validateLength minimum="2" maximum="100" />
+                            </p:inputText>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="#{bundle.atualizar}" update=":form:bandsDataTable, :msgs" oncomplete="handleSubmitRequest(args, bandDetailDialog,'bandDetailForm'); " actionListener="#{bandController.doUpdateBand}"/>
+                            </f:facet>
+                        </p:panelGrid> 
+                    </h:form>
+                </p:dialog>
+
+                <!-- dialogo de confirmação de remoção -->
+                <p:confirmDialog id="confirmDialog" widgetVar="removeBandDialog" message="#{bundle.removeConfirm}" header="#{bundle.delBand}" severity="alert">  
+                    <h:form id="removeBandForm">
+                        <h:inputHidden value="#{bandController.selectedBand.id}" />
+                        <p:commandButton id="confirm" value="#{bundle.yes}" update=":form:bandsDataTable" oncomplete="removeBandDialog.hide()" actionListener="#{bandController.doDeleteBand}" />  
+                        <p:commandButton id="decline" value="#{bundle.no}" onclick="removeBandDialog.hide();" type="button" />   
+                    </h:form>
+                </p:confirmDialog>
+
+                <script type="text/javascript">
+                            // verifica se uma linha da tabela foi selecionada e habilita os botões de ação.  
+                            function isSelectedBand(xhr, status, args) {
+                                if (args.isSelected) {
+                                    bandViewDetailBtnTop.enable();
+                                    bandDeleteBtnTop.enable();
+                                    bandViewDetailBtnBottom.enable();
+                                    bandDeleteBtnBottom.enable();
+                                }
+                            }
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>

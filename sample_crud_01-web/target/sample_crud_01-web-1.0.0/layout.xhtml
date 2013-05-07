@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <link rel="icon" href="#{request.contextPath}/images/favicon.ico" />
+        <h:outputStylesheet library="theme" name="css/theme.css.jsf?ln=primefaces-bootstrap"/>
+        <h:outputStylesheet library="theme" name="css/default.css"/>
+        <h:outputStylesheet library="theme" name="css/main.css"/>
+        <h:outputScript library="theme" name="js/main.js"/>
+        <title>#{bundle.applicationName} - <ui:insert name="title">Title</ui:insert></title>
+    </h:head>
+
+    <h:body>
+        
+        <ui:insert name="content">Content</ui:insert>
+        
+        <div class="ui-widget ui-widget-header ui-corner-all" id="footer">
+	    <p class="copyright">Heavy Metal</p>
+	</div>
+
+    </h:body>
+</html>
