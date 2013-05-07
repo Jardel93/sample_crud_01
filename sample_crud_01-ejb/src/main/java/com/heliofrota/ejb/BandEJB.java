@@ -2,6 +2,7 @@ package com.heliofrota.ejb;
 
 import com.heliofrota.entity.Band;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,8 +16,12 @@ public class BandEJB {
 
     @PersistenceContext()
     private EntityManager em;
+    
+    @EJB
+    private GoodByeUtilClassesEJB goodByeUtilClassesEJB;
 
     public void add(Band band) {
+        System.out.println(goodByeUtilClassesEJB.sayHello());
         em.persist(band);
     }
 
