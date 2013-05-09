@@ -4,10 +4,13 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
         <link rel="icon" href="#{request.contextPath}/images/favicon.ico" />
         <h:outputStylesheet library="theme" name="css/theme.css.jsf?ln=primefaces-bootstrap"/>
         <h:outputStylesheet library="theme" name="css/default.css"/>
         <h:outputStylesheet library="theme" name="css/main.css"/>
+
+        <h:outputStylesheet library="theme" name="css/bootstrap-responsive.css"/>
         <h:outputScript library="theme" name="js/main.js"/>
         <title>#{bundle.applicationName} - <ui:insert name="title">Title</ui:insert></title>
     </h:head>
@@ -15,30 +18,43 @@
     <h:body>
         
         <h:form>
-            <p:menubar>
-                <p:menuitem value="teste 1" url="/index.xhtml" />
-                <p:menuitem value="teste 2" url="/index.xhtml" />
-                <p:menuitem value="teste 3" url="/index.xhtml" />
-                <p:menuitem value="teste 4" url="/index.xhtml" />
-                <p:menuitem value="teste 5" url="/index.xhtml" />
-                
-                <p:submenu label="Teste Sub">
-                    <p:menuitem value="sub do sub 1" url="/index.xhtml"/>
-                    <p:submenu label="sub do sub 2">
-                        <p:menuitem value="sub do sub do sub 1" url="/index.xhtml" />
-                        <p:menuitem value="sub do sub do sub 2" url="/index.xhtml" />
-                    </p:submenu>
-                    <p:menuitem value="abcde" url="/index.xhtml"/>
-                </p:submenu>
-                
-            </p:menubar>
+            <div class="navbar navbar-fixed-top">
+
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" style="background-color: black">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <div class="nav-collapse">
+                            <p:menubar styleClass="nav">
+                                <p:menuitem value="teste 1" url="/index.xhtml" />
+                                <p:menuitem value="teste 2" url="/index.xhtml" />
+                                <p:menuitem value="teste 3" url="/index.xhtml" />
+                                <p:menuitem value="teste 4" url="/index.xhtml" />
+                                <p:menuitem value="teste 5" url="/index.xhtml" />
+
+                                <p:submenu label="Teste Sub">
+                                    <p:menuitem value="sub do sub 1" url="/index.xhtml"/>
+                                    <p:submenu label="sub do sub 2">
+                                        <p:menuitem value="sub do sub do sub 1" url="/index.xhtml" />
+                                        <p:menuitem value="sub do sub do sub 2" url="/index.xhtml" />
+                                    </p:submenu>
+                                    <p:menuitem value="abcde" url="/index.xhtml"/>
+                                </p:submenu>
+                            </p:menubar>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </h:form>    
-        
+
         <ui:insert name="content">Content</ui:insert>
-        
+
         <div class="ui-widget ui-widget-header ui-corner-all" id="footer">
-	    <p class="copyright">Heavy Metal</p>
-	</div>
+            <p class="copyright">Heavy Metal</p>
+        </div>
 
     </h:body>
 </html>
